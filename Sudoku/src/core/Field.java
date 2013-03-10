@@ -61,6 +61,19 @@ public class Field {
 		ArrayList<Integer>[][] square = new ArrayList[this.subsquareWidth][this.subsquareHeight];
 		int[] rowLimits = this.getLowHigh(row, 0, this.subsquareWidth-1, this.subsquareWidth);
 		int[] colLimits = this.getLowHigh(col, 0, this.subsquareHeight-1, this.subsquareHeight);
+		
+		int rowIndex = 0;
+		int colIndex = 0;
+		for(int i = rowLimits[0]; i <= rowLimits[1]; i++){
+			ArrayList<Integer>[] rowArray = this.getRow(i);
+			for(int k = colLimits[0]; k <= colLimits[1]; k++){
+				square[rowIndex][colIndex] = rowArray[k];
+				colIndex++;
+			}
+			rowIndex++;
+			colIndex = 0;
+		}
+		
 		return square;
 	}
 	
@@ -88,13 +101,24 @@ public class Field {
 	 * @param val
 	 */
 	public void removeValue(int row, int col, int val){
-		ArrayList<Integer> list = this.field[row][col];
-		assert list.size() > 1;
-		list.remove(val);
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		assert this.field[row][col].size() > 1;
+		for(int oldVal : this.field[row][col]){
+			if(oldVal != val){
+				list.add(oldVal);
+			}
+		}
 		this.field[row][col] = list;
+		
+		if ( list.size() == 0){
+			System.out.println(row+","+col+","+val);
+		}
 	}
 	
 	
+	public ArrayList<Integer> getValues(int row, int col){
+		return new ArrayList<Integer>(this.field[row][col]);
+	}
 	
 	
 	public String toString(){
@@ -113,8 +137,13 @@ public class Field {
 		for (ArrayList<Integer> list : row){
 			if(list.size() > 1){
 				line = line + 0 + " ";
-			}else{
+			}else if(list.size() == 1){
 				line = line + list.get(0) + " ";
+			}else{
+				line = line + "? ";
+				
+				System.out.println("\n"+line);
+				System.exit(2);
 			}
 		}
 		return line.trim()+"\n";

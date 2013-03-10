@@ -17,11 +17,32 @@ public class Sudoku {
 	public Sudoku(String[] args){
 		SudokuReader in = this.readInput(args);
 		Field field = in.getSudokuField();	
+		Constraints constraints = new Constraints(field);
 		System.out.println(field);
-		field.getSquare(0, 1);
-		field.getSquare(1, 3);
-		field.getSquare(5, 5);
-		field.getSquare(8, 7);
+		//System.out.println(field.getSquareAsField(5,5));
+		//System.out.println(constraints.isConflictingWithSquare(4, 7, 7));
+		//System.out.println(constraints.isConflictingWithRow(4, 7, 7));
+		//System.out.println(constraints.isConflictingWithColumn(4, 7, 7));
+		//System.out.println(constraints.isSolved());
+		
+		while( constraints.isSolved() == false){
+			for(int row = 0; row < field.getRowCount(); row++){
+				for (int col = 0; col < field.getColumCount(); col++){
+					if (field.getValues(row, col).size() > 1){
+						for (int value : field.getValues(row, col)){
+							if(constraints.isConflicting(value, row, col)){
+								field.removeValue(row, col, value);
+							}
+						}
+					}					
+				}
+			}
+			
+			System.out.println(field);
+		}
+		
+		assert constraints.isSolved();
+		System.out.println(field);
 	}
 	
 	
