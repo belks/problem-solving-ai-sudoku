@@ -15,8 +15,10 @@ import java.util.ArrayList;
  */
 public class SudokuReader {
 	private ArrayList<String>[][] field = null;
-	private int squareSize = 0;
-	private int fieldSize = 0;
+	private int squareWidth = 0;
+	private int squareHeight = 0;
+	private int fieldWidth = 0;
+	private int fieldHeight = 0;
 	private String[] possibleValues = null;
 	private String emptyCellValue = null;
 	
@@ -48,10 +50,16 @@ public class SudokuReader {
 		BufferedReader buffIn = new BufferedReader(new InputStreamReader(in));
 		
 		String line = this.readNextLine(buffIn);
-		this.fieldSize = new Integer(line.split(",")[0]);
-		this.field = new ArrayList[new Integer(fieldSize)][new Integer(fieldSize)];	
-		this.squareSize = new Integer(line.split(",")[1]);
+		this.fieldWidth = new Integer(line.split(",")[0]);
+		this.fieldHeight = new Integer(line.split(",")[0]);
+		this.field = new ArrayList[new Integer(fieldWidth)][new Integer(fieldHeight)];	
+		
+		line = this.readNextLine(buffIn);
+		this.squareWidth = new Integer(line.split(",")[0]);
+		this.squareHeight = new Integer(line.split(",")[1]);
+		
 		this.possibleValues = this.readNextLine(buffIn).split(",");
+		
 		this.emptyCellValue = this.readNextLine(buffIn);	
 		
 		int row = 0;
@@ -63,7 +71,7 @@ public class SudokuReader {
 		}	
 		
 		
-		if(row!=this.fieldSize){
+		if(row!=this.fieldHeight){
 			throw new IOException("Corrupt input file!!!");
 		}
 	}
@@ -99,7 +107,7 @@ public class SudokuReader {
 				col++;
 			}
 			
-			if(col!=this.fieldSize){
+			if(col!=this.fieldWidth){
 				throw new IOException("Corrupt input file!!!");
 			}
 		}
@@ -134,7 +142,7 @@ public class SudokuReader {
 	 * @return
 	 */
 	public Field getSudokuField(){
-		return new Field(this.field, new Integer(this.squareSize), new Integer(this.squareSize));
+		return new Field(this.field, new Integer(this.squareWidth), new Integer(this.squareHeight));
 	}
 	
 
