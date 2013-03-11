@@ -14,9 +14,11 @@ import java.util.ArrayList;
  *
  */
 public class SudokuReader {
-	private ArrayList<Integer>[][] field = null;
+	private ArrayList<String>[][] field = null;
 	private int squareSize = 0;
 	private int fieldSize = 0;
+	private String[] possibleValues = null;
+	private String emptyCellValue = null;
 	
 	public SudokuReader(File f) throws IOException{
 		this(new FileInputStream(f));
@@ -45,16 +47,12 @@ public class SudokuReader {
 	private void read(InputStream in) throws IOException{
 		BufferedReader buffIn = new BufferedReader(new InputStreamReader(in));
 		
-		String line = null;
-		while( (line = buffIn.readLine()) != null){
-			if(!line.startsWith("#") && !line.trim().isEmpty()){
-				this.fieldSize = new Integer(line.split(",")[0]);
-				this.field = new ArrayList[new Integer(fieldSize)][new Integer(fieldSize)];	
-				this.squareSize = new Integer(line.split(",")[1]);
-				break;
-			}			
-		}	
-		
+		String line = this.readNextLine(buffIn);
+		this.fieldSize = new Integer(line.split(",")[0]);
+		this.field = new ArrayList[new Integer(fieldSize)][new Integer(fieldSize)];	
+		this.squareSize = new Integer(line.split(",")[1]);
+		this.possibleValues = this.readNextLine(buffIn).split(",");
+		this.emptyCellValue = this.readNextLine(buffIn);	
 		
 		int row = 0;
 		while( (line = buffIn.readLine()) != null){
@@ -70,6 +68,18 @@ public class SudokuReader {
 		}
 	}
 	
+	
+	private String readNextLine(BufferedReader buffIn) throws IOException{
+		String line = null;
+		while( (line = buffIn.readLine()) != null){
+			line = line.trim();
+			if(!line.startsWith("#") && !line.isEmpty()){
+				return line;
+			}
+		}
+		return line;
+	}
+	
 	/**
 	 * Transforms a line of input into a line in the field object.
 	 * @param line
@@ -81,11 +91,10 @@ public class SudokuReader {
 			String[] vals = line.split(" ");
 			int col = 0;
 			for(String num : vals){
-				Integer number = new Integer(num);
-				if(number == 0){
+				if(num.equals(this.emptyCellValue)){
 					this.field[row][col] = this.getFullList();
 				}else{
-					this.field[row][col] = this.getSingleList(number);
+					this.field[row][col] = this.getSingleList(num);
 				}
 				col++;
 			}
@@ -100,10 +109,10 @@ public class SudokuReader {
 	 * Creates a list filled with all values from 1 to 9.
 	 * @return
 	 */
-	private ArrayList<Integer> getFullList(){
-		ArrayList<Integer> l = new ArrayList<Integer>();
-		for(int i = 1; i<=(this.fieldSize); i++){
-			l.add(i);
+	private ArrayList<String> getFullList(){
+		ArrayList<String> l = new ArrayList<>();
+		for(String s : this.possibleValues){
+			l.add(s);
 		}
 		return l;
 	}
@@ -113,8 +122,8 @@ public class SudokuReader {
 	 * @param val
 	 * @return
 	 */
-	private ArrayList<Integer> getSingleList(int val){
-		ArrayList<Integer> l = new ArrayList<Integer>();
+	private ArrayList<String> getSingleList(String val){
+		ArrayList<String> l = new ArrayList<>();
 		l.add(val);
 		return l;
 	}
