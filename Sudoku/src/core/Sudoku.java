@@ -104,7 +104,7 @@ public class Sudoku {
 			if(args.length > 0){
 				return new SudokuReader(args[0]);
 			}else{
-				return new SudokuReader(this.getClass().getResourceAsStream("example3.sudoku"));
+				return new SudokuReader(this.getClass().getResourceAsStream("example1.sudoku"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
