@@ -52,7 +52,7 @@ public class Sudoku {
 		boolean found = false;
 		for(int row = 0; row < field.getRowCount(); row++){
 			for (int col = 0; col < field.getColumCount(); col++){
-				for (int value : field.getValues(row, col)){
+				for (String value : field.getValues(row, col)){
 					if(field.getValues(row, col).size() > 1 && constraints.isLeftOver(value, row, col)){
 						field.setValue(row, col, value);
 						found = true;
@@ -71,7 +71,7 @@ public class Sudoku {
 			repeat = false;
 			for(int row = 0; row < field.getRowCount(); row++){
 				for (int col = 0; col < field.getColumCount(); col++){
-					for (int value : field.getValues(row, col)){
+					for (String value : field.getValues(row, col)){
 						if(field.getValues(row, col).size() > 1 && constraints.isConflicting(value, row, col)){
 							field.removeValue(row, col, value);
 							repeat = true;
@@ -87,7 +87,7 @@ public class Sudoku {
 		boolean found = false;
 		for(int row = 0; row < field.getRowCount(); row++){
 			for (int col = 0; col < field.getColumCount(); col++){
-				for (int value : field.getValues(row, col)){
+				for (String value : field.getValues(row, col)){
 					if(field.getValues(row, col).size() > 1 && constraints.isTheRightCoice(value, row, col)){
 						field.setValue(row, col, value);
 						found = true;

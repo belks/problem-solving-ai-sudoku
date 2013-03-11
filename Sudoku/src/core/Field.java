@@ -3,11 +3,11 @@ package core;
 import java.util.ArrayList;
 
 public class Field {
-	private ArrayList<Integer>[][] field = null;
+	private ArrayList<String>[][] field = null;
 	private int subsquareWidth = 0;
 	private int subsquareHeight = 0; 
 	
-	public Field(ArrayList<Integer>[][] field, int subsquareWidth, int subsquareHeight){
+	public Field(ArrayList<String>[][] field, int subsquareWidth, int subsquareHeight){
 		this.field = field;
 		this.subsquareWidth = subsquareWidth;
 		this.subsquareHeight = subsquareHeight;
@@ -34,7 +34,7 @@ public class Field {
 	 * @param rowIndex
 	 * @return
 	 */
-	public ArrayList<Integer>[] getRow(int rowIndex){
+	public ArrayList<String>[] getRow(int rowIndex){
 		return field[rowIndex];
 	}
 	
@@ -43,9 +43,9 @@ public class Field {
 	 * @param colIndex
 	 * @return
 	 */
-	public ArrayList<Integer>[] getColumn(int colIndex){
+	public ArrayList<String>[] getColumn(int colIndex){
 		@SuppressWarnings("unchecked")
-		ArrayList<Integer>[] col = new ArrayList[this.getRowCount()]; 
+		ArrayList<String>[] col = new ArrayList[this.getRowCount()]; 
 		for(int row = 0; row < this.getRowCount(); row++){
 			col[row] = field[row][colIndex];
 		}
@@ -56,16 +56,16 @@ public class Field {
 	/**
 	 * Returns the square in which the specified element lies in. 
 	 */
-	public ArrayList<Integer>[][] getSquare(int row, int col){
+	public ArrayList<String>[][] getSquare(int row, int col){
 		@SuppressWarnings("unchecked")
-		ArrayList<Integer>[][] square = new ArrayList[this.subsquareWidth][this.subsquareHeight];
+		ArrayList<String>[][] square = new ArrayList[this.subsquareWidth][this.subsquareHeight];
 		int[] rowLimits = this.getLowHigh(row, 0, this.subsquareWidth-1, this.subsquareWidth);
 		int[] colLimits = this.getLowHigh(col, 0, this.subsquareHeight-1, this.subsquareHeight);
 		
 		int rowIndex = 0;
 		int colIndex = 0;
 		for(int i = rowLimits[0]; i <= rowLimits[1]; i++){
-			ArrayList<Integer>[] rowArray = this.getRow(i);
+			ArrayList<String>[] rowArray = this.getRow(i);
 			for(int k = colLimits[0]; k <= colLimits[1]; k++){
 				square[rowIndex][colIndex] = rowArray[k];
 				colIndex++;
@@ -100,11 +100,11 @@ public class Field {
 	 * @param row
 	 * @param val
 	 */
-	public void removeValue(int row, int col, int val){
-		ArrayList<Integer> list = new ArrayList<Integer>();
+	public void removeValue(int row, int col, String val){
+		ArrayList<String> list = new ArrayList<>();
 		assert this.field[row][col].size() > 1;
-		for(int oldVal : this.field[row][col]){
-			if(oldVal != val){
+		for(String oldVal : this.field[row][col]){
+			if(!oldVal.equals(val)){
 				list.add(oldVal);
 			}
 		}
@@ -115,22 +115,22 @@ public class Field {
 		}
 	}
 	
-	public void setValue(int row, int col, int val){
-		ArrayList<Integer> list = new ArrayList<Integer>();
+	public void setValue(int row, int col, String val){
+		ArrayList<String> list = new ArrayList<>();
 		list.add(val);
 		this.field[row][col] = list;
 	}
 	
 	
-	public ArrayList<Integer> getValues(int row, int col){
-		return new ArrayList<Integer>(this.field[row][col]);
+	public ArrayList<String> getValues(int row, int col){
+		return new ArrayList<String>(this.field[row][col]);
 	}
 	
 	
 	public String toString(){
 		String output = "";
 		
-		for(ArrayList<Integer>[] row : field){
+		for(ArrayList<String>[] row : field){
 			output = output + this.rowToString(row);
 		}		
 		
@@ -143,9 +143,9 @@ public class Field {
 	}
 	
 	
-	public String rowToString(ArrayList<Integer>[] row){
+	public String rowToString(ArrayList<String>[] row){
 		String line = "";
-		for (ArrayList<Integer> list : row){
+		for (ArrayList<String> list : row){
 			if(list.size() > 1){
 				line = line + "["+ list.size() + "] ";
 			}else if(list.size() == 1){
