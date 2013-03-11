@@ -15,7 +15,8 @@ import java.util.ArrayList;
  */
 public class SudokuReader {
 	private ArrayList<Integer>[][] field = null;
-	private String[] squareSize = null;
+	private int squareSize = 0;
+	private int fieldSize = 0;
 	
 	public SudokuReader(File f) throws IOException{
 		this(new FileInputStream(f));
@@ -32,9 +33,10 @@ public class SudokuReader {
 	
 	/**
 	 * Reads the input file line by line.
-	 * First two lines are comments starting with #.
-	 * #fieldwidth,fieldheight
-	 * #subsquarewidth, subsquareheight
+	 * Comments are starting with #.
+	 * #The first line has to be fieldwidth,subsquarewidth
+	 * 9,3
+	 * #Then follows the data..
 	 * 0 1 0 2 ...
 	 * @param in
 	 * @throws IOException
@@ -43,28 +45,38 @@ public class SudokuReader {
 	private void read(InputStream in) throws IOException{
 		BufferedReader buffIn = new BufferedReader(new InputStreamReader(in));
 		
-		String line = buffIn.readLine().trim();
-		assert line.startsWith("#");
-		String[] fieldSize = line.substring(1).split(",");
-		this.field = new ArrayList[new Integer(fieldSize[0])][new Integer(fieldSize[1])];	
+		String line = null;
+		while( (line = buffIn.readLine()) != null){
+			if(!line.startsWith("#") && !line.trim().isEmpty()){
+				this.fieldSize = new Integer(line.split(",")[0]);
+				this.field = new ArrayList[new Integer(fieldSize)][new Integer(fieldSize)];	
+				this.squareSize = new Integer(line.split(",")[1]);
+				break;
+			}			
+		}	
 		
-		line = buffIn.readLine().trim();
-		assert line.startsWith("#");
-		this.squareSize = line.substring(1).split(",");
 		
 		int row = 0;
 		while( (line = buffIn.readLine()) != null){
-			this.parseLine(line.trim(), row);
-			row++;
-		}		
+			if(!line.startsWith("#") && !line.trim().isEmpty()){
+				this.parseLine(line.trim(), row);
+				row++;
+			}			
+		}	
+		
+		
+		if(row!=this.fieldSize){
+			throw new IOException("Corrupt input file!!!");
+		}
 	}
 	
 	/**
 	 * Transforms a line of input into a line in the field object.
 	 * @param line
 	 * @param row
+	 * @throws IOException 
 	 */
-	private void parseLine(String line, int row){
+	private void parseLine(String line, int row) throws IOException{
 		if(!line.isEmpty()){
 			String[] vals = line.split(" ");
 			int col = 0;
@@ -77,7 +89,10 @@ public class SudokuReader {
 				}
 				col++;
 			}
-			row++;
+			
+			if(col!=this.fieldSize){
+				throw new IOException("Corrupt input file!!!");
+			}
 		}
 	}
 	
@@ -87,7 +102,7 @@ public class SudokuReader {
 	 */
 	private ArrayList<Integer> getFullList(){
 		ArrayList<Integer> l = new ArrayList<Integer>();
-		for(int i = 1; i<10; i++){
+		for(int i = 1; i<=(this.fieldSize); i++){
 			l.add(i);
 		}
 		return l;
@@ -110,7 +125,7 @@ public class SudokuReader {
 	 * @return
 	 */
 	public Field getSudokuField(){
-		return new Field(this.field, new Integer(this.squareSize[0]), new Integer(this.squareSize[1]));
+		return new Field(this.field, new Integer(this.squareSize), new Integer(this.squareSize));
 	}
 	
 
