@@ -151,7 +151,7 @@ public class Field {
 			}else if(list.size() == 1){
 				line = line + " " + list.get(0) + "  ";
 			}else{
-				line = line + "? ";
+				line = line + " ?  ";
 			}
 		}
 		return line+"\n";
