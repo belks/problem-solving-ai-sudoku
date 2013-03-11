@@ -111,8 +111,14 @@ public class Field {
 		this.field[row][col] = list;
 		
 		if ( list.size() == 0){
-			System.out.println(row+","+col+","+val);
+			//System.out.println(row+","+col+","+val);
 		}
+	}
+	
+	public void setValue(int row, int col, int val){
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(val);
+		this.field[row][col] = list;
 	}
 	
 	
@@ -128,25 +134,27 @@ public class Field {
 			output = output + this.rowToString(row);
 		}		
 		
+		if(output.contains("?")){
+			System.out.println(output);
+			System.exit(2);
+		}
+		
 		return output;
 	}
 	
 	
-	private String rowToString(ArrayList<Integer>[] row){
+	public String rowToString(ArrayList<Integer>[] row){
 		String line = "";
 		for (ArrayList<Integer> list : row){
 			if(list.size() > 1){
-				line = line + 0 + " ";
+				line = line + "["+ list.size() + "] ";
 			}else if(list.size() == 1){
-				line = line + list.get(0) + " ";
+				line = line + " " + list.get(0) + "  ";
 			}else{
 				line = line + "? ";
-				
-				System.out.println("\n"+line);
-				System.exit(2);
 			}
 		}
-		return line.trim()+"\n";
+		return line+"\n";
 	}
 	
 	

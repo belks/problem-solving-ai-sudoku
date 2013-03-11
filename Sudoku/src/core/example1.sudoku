@@ -1,5 +1,7 @@
-#9,9
-#3,3
+#fieldsize,squaresize must be first non comment line
+9,3
+#0 stands for empty cell
+#SUDOKU:
 0 3 0 0 0 0 0 0 0
 0 0 0 1 9 5 0 0 0
 0 0 8 0 0 0 0 6 0

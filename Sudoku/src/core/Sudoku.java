@@ -18,33 +18,85 @@ public class Sudoku {
 		SudokuReader in = this.readInput(args);
 		Field field = in.getSudokuField();	
 		Constraints constraints = new Constraints(field);
+		System.out.println("Input:");
 		System.out.println(field);
-		//System.out.println(field.getSquareAsField(5,5));
-		//System.out.println(constraints.isConflictingWithSquare(4, 7, 7));
-		//System.out.println(constraints.isConflictingWithRow(4, 7, 7));
-		//System.out.println(constraints.isConflictingWithColumn(4, 7, 7));
-		//System.out.println(constraints.isSolved());
 		
 		while( constraints.isSolved() == false){
+			this.eliminateConflicts(field, constraints);
+			System.out.println("Field after conflict elimination:");
+			System.out.println(field);	
+			
+			if(constraints.isSolved()){
+				break;
+			}
+			
+			if(this.findLeftOvers(field, constraints)){
+				System.out.println("Field after left overs:");
+				System.out.println(field);
+				continue;
+			}else{
+				this.findChoices(field, constraints);
+				System.out.println("Field after choices done:");
+				System.out.println(field);
+			}					
+		}
+				
+		System.out.println("Result:");
+		System.out.println(field);
+		System.out.println("Solved = "+constraints.isSolvedWithoutConflicts());
+	}
+	
+	
+	
+	private boolean findLeftOvers(Field field, Constraints constraints) {
+		boolean found = false;
+		for(int row = 0; row < field.getRowCount(); row++){
+			for (int col = 0; col < field.getColumCount(); col++){
+				for (int value : field.getValues(row, col)){
+					if(field.getValues(row, col).size() > 1 && constraints.isLeftOver(value, row, col)){
+						field.setValue(row, col, value);
+						found = true;
+					}
+				}					
+			}
+		}
+		return found;
+	}
+
+
+
+	private void eliminateConflicts(Field field, Constraints constraints){
+		boolean repeat = true;
+		while(repeat){
+			repeat = false;
 			for(int row = 0; row < field.getRowCount(); row++){
 				for (int col = 0; col < field.getColumCount(); col++){
-					if (field.getValues(row, col).size() > 1){
-						for (int value : field.getValues(row, col)){
-							if(constraints.isConflicting(value, row, col)){
-								field.removeValue(row, col, value);
-							}
+					for (int value : field.getValues(row, col)){
+						if(field.getValues(row, col).size() > 1 && constraints.isConflicting(value, row, col)){
+							field.removeValue(row, col, value);
+							repeat = true;
 						}
 					}					
 				}
 			}
-			
-			System.out.println(field);
 		}
-		
-		assert constraints.isSolved();
-		System.out.println(field);
 	}
 	
+	
+	private boolean findChoices(Field field, Constraints constraints){
+		boolean found = false;
+		for(int row = 0; row < field.getRowCount(); row++){
+			for (int col = 0; col < field.getColumCount(); col++){
+				for (int value : field.getValues(row, col)){
+					if(field.getValues(row, col).size() > 1 && constraints.isTheRightCoice(value, row, col)){
+						field.setValue(row, col, value);
+						found = true;
+					}
+				}					
+			}
+		}
+		return found;
+	}
 	
 	
 	private SudokuReader readInput(String[] args){
