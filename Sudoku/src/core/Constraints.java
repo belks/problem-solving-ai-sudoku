@@ -1,6 +1,6 @@
 package core;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Constraints {
 	private Field field = null;
@@ -14,20 +14,18 @@ public class Constraints {
 	 */
 	public boolean isConflictingWithSquare(String number, int row, int col){
 		Field square = this.field.getSquareAsField(row, col);
-		
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){
-			for (ArrayList<String> list : square.getRow(rowIndex)){
+			for (List<String> list : square.getRow(rowIndex)){
 				if(list.size() == 1 && list.get(0).equals(number)){
 					return true;
 				}
 			}
 		}
-		
 		return false;
 	}
 	
 	public boolean isConflictingWithRow(String number, int row, int col){
-		for (ArrayList<String> list : this.field.getRow(row)){
+		for (List<String> list : this.field.getRow(row)){
 			if(list.size() == 1 && list.get(0).equals(number)){
 				return true;
 			}
@@ -36,7 +34,7 @@ public class Constraints {
 	}
 	
 	public boolean isConflictingWithColumn(String number, int row, int col){
-		for (ArrayList<String> list : this.field.getColumn(col)){
+		for (List<String> list : this.field.getColumn(col)){
 			if(list.size() == 1 && list.get(0).equals(number)){
 				return true;
 			}
@@ -45,36 +43,21 @@ public class Constraints {
 	}
 	
 	public boolean isConflicting(String number, int row, int col){
-		if(this.isConflictingWithRow(number, row, col)){
-			//System.out.println("a "+row+","+col+","+number);
-			return true;
-		}else if(this.isConflictingWithColumn(number, row, col)){
-			//System.out.println("b "+row+","+col+","+number);
-			return true;
-		}else if(this.isConflictingWithSquare(number, row, col)){
-			//System.out.println("c "+row+","+col+","+number);
-			return true;
-		}else{
-			return false;
-		}
+		return this.isConflictingWithRow(number, row, col) 
+				|| this.isConflictingWithColumn(number, row, col) 
+				|| this.isConflictingWithSquare(number, row, col);
 	}
 	
 	
 	public boolean isLeftOver(String number, int row, int col){
-		if(this.isLeftOverInRow(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else if(this.isLeftOverInColumn(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else if(this.isLeftOverInSquare(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else{
-			return false;
-		}
+		return (this.isLeftOverInRow(number, row, col) && !this.isConflicting(number, row, col))
+				|| (this.isLeftOverInColumn(number, row, col) && !this.isConflicting(number, row, col))
+				|| (this.isLeftOverInSquare(number, row, col) && !this.isConflicting(number, row, col));
 	}
 	
 	public boolean isLeftOverInRow(String number, int row, int col){
 		int colIndex = 0;
-		for(ArrayList<String> list : this.field.getRow(row)){
+		for(List<String> list : this.field.getRow(row)){
 			if(colIndex != col){
 				for(String val : list){
 					if(val.equals(number)){
@@ -89,7 +72,7 @@ public class Constraints {
 	
 	public boolean isLeftOverInColumn(String number, int row, int col){
 		int rowIndex = 0;
-		for(ArrayList<String> list : this.field.getColumn(col)){
+		for(List<String> list : this.field.getColumn(col)){
 			if(rowIndex != row){
 				for(String val : list){
 					if(val.equals(number)){
@@ -106,7 +89,7 @@ public class Constraints {
 		Field square = this.field.getSquareAsField(row, col);
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){
 			int colIndex = 0;
-			for (ArrayList<String> list : square.getRow(rowIndex)){
+			for (List<String> list : square.getRow(rowIndex)){
 				if( !(rowIndex == row && colIndex == col)){
 					for(String val : list){
 						if(val.endsWith(number)){
@@ -122,21 +105,15 @@ public class Constraints {
 	
 	
 	public boolean isTheRightCoice(String number, int row, int col){	
-		if(this.isTheRightCoiceForRow(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else if(this.isTheRightCoiceForColumn(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else if(this.isTheRightCoiceForSquare(number, row, col) && !this.isConflicting(number, row, col)){
-			return true;
-		}else{
-			return false;
-		}
+		return (this.isTheRightCoiceForRow(number, row, col) && !this.isConflicting(number, row, col))
+				|| (this.isTheRightCoiceForColumn(number, row, col) && !this.isConflicting(number, row, col))
+				|| (this.isTheRightCoiceForSquare(number, row, col) && !this.isConflicting(number, row, col));
 	}
 	
 	public boolean isTheRightCoiceForRow(String number, int row, int col){
-		ArrayList<String>[] lists = this.field.getRow(row);
+		List<String>[] lists = this.field.getRow(row);
 		int numOfListWith2Elems = 0;
-		for(ArrayList<String> l : lists){
+		for(List<String> l : lists){
 			if(l.size() > 2){
 				return false;
 			}else if(l.size() == 2){
@@ -150,9 +127,9 @@ public class Constraints {
 	}	
 	
 	public boolean isTheRightCoiceForColumn(String number, int row, int col){
-		ArrayList<String>[] lists = this.field.getColumn(col);
+		List<String>[] lists = this.field.getColumn(col);
 		int numOfListWith2Elems = 0;
-		for(ArrayList<String> l : lists){
+		for(List<String> l : lists){
 			if(l.size() > 2){
 				return false;
 			}else if(l.size() == 2){
@@ -169,10 +146,9 @@ public class Constraints {
 		Field square = this.field.getSquareAsField(row, col);
 		int numOfListWith2Elems = 0;
 
-		 
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){
-			ArrayList<String>[] lists = this.field.getRow(rowIndex);
-			for(ArrayList<String> l : lists){
+			List<String>[] lists = this.field.getRow(rowIndex);
+			for(List<String> l : lists){
 				if(l.size() > 2){
 					return false;
 				}else if(l.size() == 2){
@@ -194,7 +170,7 @@ public class Constraints {
 	
 	public boolean isSolved(){
 		for(int i = 0; i < this.field.getRowCount(); i++){
-			for(ArrayList<String> list : this.field.getRow(i)){
+			for(List<String> list : this.field.getRow(i)){
 				if(list.size() > 1){
 					return false;
 				}
@@ -211,7 +187,7 @@ public class Constraints {
 		
 		for(int row = 0; row < this.field.getRowCount(); row++){
 			int col = 0;
-			for(ArrayList<String> list : this.field.getRow(row)){
+			for(List<String> list : this.field.getRow(row)){
 				list.add("xxxxxxxxxxxxxxxxxxxxxx");
 				if(this.isConflicting(list.get(0), row, col)){
 					System.out.println("Conflict at: "+ row +","+ col + ":" +list.get(0));
