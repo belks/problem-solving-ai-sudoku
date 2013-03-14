@@ -86,6 +86,7 @@ public class Sudoku {
 					if(field.getValues(row, col).size() > 1 && constraints.isLeftOver(value, row, col)){
 						field.setValue(row, col, value);
 						found = true;
+						break;
 					}
 				}					
 			}
@@ -102,6 +103,7 @@ public class Sudoku {
 					if(field.getValues(row, col).size() > 1 && constraints.isTheRightCoice(value, row, col)){
 						field.setValue(row, col, value);
 						found = true;
+						break;
 					}
 				}					
 			}
