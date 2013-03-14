@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Reads the input file. 
@@ -14,12 +15,12 @@ import java.util.ArrayList;
  *
  */
 public class SudokuReader {
-	private ArrayList<String>[][] field = null;
+	private List<String>[][] field = null;
 	private int squareWidth = 0;
 	private int squareHeight = 0;
 	private int fieldWidth = 0;
 	private int fieldHeight = 0;
-	private String[] possibleValues = null;
+	private List<String> possibleValues = null;
 	private String emptyCellValue = null;
 	
 	public SudokuReader(File f) throws IOException{
@@ -58,7 +59,11 @@ public class SudokuReader {
 		this.squareWidth = new Integer(line.split(",")[0]);
 		this.squareHeight = new Integer(line.split(",")[1]);
 		
-		this.possibleValues = this.readNextLine(buffIn).split(",");
+		//Create a list filled with all values
+		possibleValues = new ArrayList<>();
+		for(String s : this.readNextLine(buffIn).split(",")){
+			this.possibleValues.add(s);
+		}
 		
 		this.emptyCellValue = this.readNextLine(buffIn);	
 		
@@ -69,9 +74,8 @@ public class SudokuReader {
 				row++;
 			}			
 		}	
-		
-		
-		if(row!=this.fieldHeight){
+				
+		if(row != this.fieldHeight){
 			throw new IOException("Corrupt input file!!!");
 		}
 	}
@@ -100,41 +104,22 @@ public class SudokuReader {
 			int col = 0;
 			for(String num : vals){
 				if(num.equals(this.emptyCellValue)){
-					this.field[row][col] = this.getFullList();
+					this.field[row][col] = new ArrayList<String>(this.possibleValues);
 				}else{
-					this.field[row][col] = this.getSingleList(num);
+					List<String> l = new ArrayList<>();
+					l.add(num);
+					this.field[row][col] = l;
 				}
 				col++;
 			}
 			
-			if(col!=this.fieldWidth){
+			if(col != this.fieldWidth){
 				throw new IOException("Corrupt input file!!!");
 			}
 		}
 	}
 	
-	/**
-	 * Creates a list filled with all values from 1 to 9.
-	 * @return
-	 */
-	private ArrayList<String> getFullList(){
-		ArrayList<String> l = new ArrayList<>();
-		for(String s : this.possibleValues){
-			l.add(s);
-		}
-		return l;
-	}
-	
-	/**
-	 * Creates a list with a single element for known numbers.
-	 * @param val
-	 * @return
-	 */
-	private ArrayList<String> getSingleList(String val){
-		ArrayList<String> l = new ArrayList<>();
-		l.add(val);
-		return l;
-	}
+		
 	
 	
 	/**
@@ -142,7 +127,7 @@ public class SudokuReader {
 	 * @return
 	 */
 	public Field getSudokuField(){
-		return new Field(this.field, new Integer(this.squareWidth), new Integer(this.squareHeight));
+		return new Field(this.field.clone(), new Integer(this.squareWidth), new Integer(this.squareHeight));
 	}
 	
 
