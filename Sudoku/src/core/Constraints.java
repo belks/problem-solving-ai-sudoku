@@ -3,9 +3,9 @@ package core;
 import java.util.List;
 
 public class Constraints {
-	private Field field = null;
+	private Area field = null;
 	
-	public Constraints(Field field){
+	public Constraints(Area field){
 		this.field = field;
 	}
 	
@@ -13,7 +13,7 @@ public class Constraints {
 	 * CONSTRAINTS
 	 */
 	public boolean isConflictingWithSquare(String number, int row, int col){
-		Field square = this.field.getSquareAsField(row, col);
+		Area square = this.field.getSquareAsField(row, col);
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){
 			for (List<String> list : square.getRow(rowIndex)){
 				if(list.size() == 1 && list.get(0).equals(number)){
@@ -86,7 +86,7 @@ public class Constraints {
 	}
 	
 	public boolean isLeftOverInSquare(String number, int row, int col){
-		Field square = this.field.getSquareAsField(row, col);
+		Area square = this.field.getSquareAsField(row, col);
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){
 			int colIndex = 0;
 			for (List<String> list : square.getRow(rowIndex)){
@@ -143,7 +143,7 @@ public class Constraints {
 	}
 	
 	public boolean isTheRightCoiceForSquare(String number, int row, int col){
-		Field square = this.field.getSquareAsField(row, col);
+		Area square = this.field.getSquareAsField(row, col);
 		int numOfListWith2Elems = 0;
 
 		for(int rowIndex = 0; rowIndex < square.getRowCount(); rowIndex++){

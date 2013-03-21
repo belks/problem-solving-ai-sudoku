@@ -126,8 +126,8 @@ public class SudokuReader {
 	 * Returns the constructed field after the input file has been read.
 	 * @return
 	 */
-	public Field getSudokuField(){
-		return new Field(this.field.clone(), new Integer(this.squareWidth), new Integer(this.squareHeight));
+	public Area getSudokuField(){
+		return new Area(this.field.clone(), new Integer(this.squareWidth), new Integer(this.squareHeight));
 	}
 	
 
