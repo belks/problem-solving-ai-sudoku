@@ -28,7 +28,7 @@ public class Sudoku {
 	
 	
 	public void solve(SudokuReader in){
-		Field field = in.getSudokuField();	
+		Area field = in.getSudokuField();	
 		Constraints constraints = new Constraints(field);
 		System.out.println("Input:");
 		System.out.println(field);
@@ -60,7 +60,7 @@ public class Sudoku {
 
 
 
-	private void eliminateConflicts(Field field, Constraints constraints){
+	private void eliminateConflicts(Area field, Constraints constraints){
 		boolean repeat = true;
 		while(repeat){
 			repeat = false;
@@ -78,7 +78,7 @@ public class Sudoku {
 	}
 	
 	
-	private boolean findLeftOvers(Field field, Constraints constraints) {
+	private boolean findLeftOvers(Area field, Constraints constraints) {
 		boolean found = false;
 		for(int row = 0; row < field.getRowCount(); row++){
 			for (int col = 0; col < field.getColumCount(); col++){
@@ -95,7 +95,7 @@ public class Sudoku {
 	}
 	
 	
-	private boolean findChoices(Field field, Constraints constraints){
+	private boolean findChoices(Area field, Constraints constraints){
 		boolean found = false;
 		for(int row = 0; row < field.getRowCount(); row++){
 			for (int col = 0; col < field.getColumCount(); col++){

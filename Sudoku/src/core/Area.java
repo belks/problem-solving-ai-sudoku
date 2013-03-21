@@ -3,12 +3,12 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Field {
+public class Area {
 	private List<String>[][] field = null;
 	private int subsquareWidth = 0;
 	private int subsquareHeight = 0; 
 	
-	public Field(List<String>[][] field, int subsquareWidth, int subsquareHeight){
+	public Area(List<String>[][] field, int subsquareWidth, int subsquareHeight){
 		this.field = field;
 		this.subsquareWidth = subsquareWidth;
 		this.subsquareHeight = subsquareHeight;
@@ -57,7 +57,7 @@ public class Field {
 	/**
 	 * Returns the square in which the specified element lies in. 
 	 */
-	public Field getSquareAsField(int row, int col){
+	public Area getSquareAsField(int row, int col){
 		@SuppressWarnings("unchecked")
 		List<String>[][] square = new ArrayList[this.subsquareWidth][this.subsquareHeight];
 		int[] rowLimits = this.getLowHigh(row, 0, this.subsquareWidth-1, this.subsquareWidth);
@@ -75,7 +75,7 @@ public class Field {
 			colIndex = 0;
 		}
 		
-		return new Field(square, 0,0);
+		return new Area(square, 0,0);
 	}
 	
 	
