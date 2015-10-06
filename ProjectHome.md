@@ -1,0 +1,1 @@
+Sudoku, constraint based method
